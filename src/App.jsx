@@ -39,8 +39,7 @@ export const App = () => {
         <button
           onClick={() => setSortType(SORT_BY_FIELDS.alphabetic)}
           type="button"
-          className={cn('button', {
-            'is-info': sortType === SORT_BY_FIELDS.alphabetic,
+          className={cn('button is-info', {
             'is-light': sortType !== SORT_BY_FIELDS.alphabetic,
           })}
         >
@@ -50,8 +49,7 @@ export const App = () => {
         <button
           onClick={() => setSortType(SORT_BY_FIELDS.length)}
           type="button"
-          className={cn('button', {
-            'is-success': sortType === SORT_BY_FIELDS.length,
+          className={cn('button is-success', {
             'is-light': sortType !== SORT_BY_FIELDS.length,
           })}
         >
@@ -61,8 +59,7 @@ export const App = () => {
         <button
           onClick={() => setIsReversed(!isReversed)}
           type="button"
-          className={cn('button', {
-            'is-warning': isReversed,
+          className={cn('button is-warning', {
             'is-light': !isReversed,
           })}
         >
