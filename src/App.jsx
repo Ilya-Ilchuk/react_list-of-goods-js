@@ -1,6 +1,9 @@
 import 'bulma/css/bulma.css';
 import './App.scss';
 import { useState } from 'react';
+import cn from 'classnames';
+import { SORT_BY_FIELDS } from './utils/sortFields';
+import { getVisibleGoods } from './utils/getVisibleGoods';
 
 export const goodsFromServer = [
   'Dumplings',
@@ -14,39 +17,21 @@ export const goodsFromServer = [
   'Jam',
   'Garlic',
 ];
-
 export const App = () => {
-  const SORT_BY_FIELDS = {
-    alphabetic: 'alphabet',
-    length: 'length',
-    none: 'none',
-  };
-
   const [sortType, setSortType] = useState(SORT_BY_FIELDS.none);
   const [isReversed, setIsReversed] = useState(false);
-
-  const getVisibleGoods = () => {
-    const sortedGoods = [...goodsFromServer];
-
-    if (sortType === SORT_BY_FIELDS.alphabetic) {
-      sortedGoods.sort((a, b) => a.localeCompare(b));
-    } else if (sortType === SORT_BY_FIELDS.length) {
-      sortedGoods.sort((a, b) => a.length - b.length);
-    }
-
-    if (isReversed) {
-      sortedGoods.reverse();
-    }
-
-    return sortedGoods;
-  };
 
   const resetGoods = () => {
     setSortType(SORT_BY_FIELDS.none);
     setIsReversed(false);
   };
 
-  const visibleGoods = getVisibleGoods();
+  const visibleGoods = getVisibleGoods(
+    goodsFromServer,
+    sortType,
+    isReversed,
+    SORT_BY_FIELDS,
+  );
 
   return (
     <div className="section content">
@@ -54,7 +39,10 @@ export const App = () => {
         <button
           onClick={() => setSortType(SORT_BY_FIELDS.alphabetic)}
           type="button"
-          className={`button is-info ${sortType === SORT_BY_FIELDS.alphabetic ? `is-info` : `is-light`}`}
+          className={cn('button', {
+            'is-info': sortType === SORT_BY_FIELDS.alphabetic,
+            'is-light': sortType !== SORT_BY_FIELDS.alphabetic,
+          })}
         >
           Sort alphabetically
         </button>
@@ -62,7 +50,10 @@ export const App = () => {
         <button
           onClick={() => setSortType(SORT_BY_FIELDS.length)}
           type="button"
-          className={`button is-success ${sortType === SORT_BY_FIELDS.length ? `is-success` : `is-light`}`}
+          className={cn('button', {
+            'is-success': sortType === SORT_BY_FIELDS.length,
+            'is-light': sortType !== SORT_BY_FIELDS.length,
+          })}
         >
           Sort by length
         </button>
@@ -70,12 +61,15 @@ export const App = () => {
         <button
           onClick={() => setIsReversed(!isReversed)}
           type="button"
-          className={`button is-warning ${!isReversed && `is-light`}`}
+          className={cn('button', {
+            'is-warning': isReversed,
+            'is-light': !isReversed,
+          })}
         >
           Reverse
         </button>
 
-        {sortType !== SORT_BY_FIELDS.none || isReversed ? (
+        {(sortType !== SORT_BY_FIELDS.none || isReversed) && (
           <button
             onClick={() => resetGoods()}
             type="button"
@@ -83,7 +77,7 @@ export const App = () => {
           >
             Reset
           </button>
-        ) : null}
+        )}
       </div>
 
       <ul>
